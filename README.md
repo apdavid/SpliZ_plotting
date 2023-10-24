@@ -66,3 +66,25 @@ A file called `plotter.txt` should be created in your `outpath` directory.
 
 If you know what genes and 3' or 5' splice sites you want to plot, you can create your own file following the format above.
 
+## Running `make_boxplots.py`
+
+To run `make_boxplots.py`, we need to edit `run_plot.sbatch`. 
+
+Edit the following lines in `run_plot.sbatch`:
+
+* `grouping_level_1`: Same as for SpliZ
+* `grouping_level_2`: Same as for SpliZ
+* `dataname`: Same as for SpliZ
+* `suffix`: The suffix on your SpliZ output files (depends on which SpliZ input parameters you had). For example, if your SpliZ summary file is called `summary_ad_synapse_all_bounds0_lanemerge_status-broad.cell.type_S_0.01_z_0.0_b_0_SICILIAN.tsv`, your suffix is `_S_0.01_z_0.0_b_0_SICILIAN`
+* `outdir`: The SpliZ output directory (the summary file should be a top-level file in this directory)
+* `outpath`: Path to the directory you want to save images to (end with `/`)
+* `plotterFile`: The path to the plotter file you want to use
+* `gtf_file`: Path to the gtf file used for SpliZ
+
+The remaining paths should be correctly defined with these inputs.
+
+Run the file using `bash run_plot.sbatch` (if you don't have that many genes to plot), or `sbatch run_plot.sbatch` (if you have many genes to plot).
+
+## Output
+
+Output should be created in the `outpath` directory. For each gene and 3' or 5' end, there should be a boxplot, dotplot, and annotation plot. There is also a tsv with the exact coordinates of the annotation plot.
