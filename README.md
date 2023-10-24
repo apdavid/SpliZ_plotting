@@ -50,4 +50,19 @@ You should have a `SpliZ_sites` directory in your output, which will have files 
 
 In this method, the plotter file will be created based on the summary output file.
 
+We will run `make_plotter.py` using `run_plotter.sbatch`. 
+
+Edit the following lines in `run_plotter.sbatch`:
+
+* Set the `outpath` value to the folder you want the plotter file to be created in
+* Set the `summary_file` value to the path of the summary file from your SpliZ output (the file in the top-level SpliZ output directory with a name starting with `summary`)
+
+Then run the script: `bash run_plotter.sbatch` (note: you can run with bash because this should be a lightweight script).
+
+A file called `plotter.txt` should be created in your `outpath` directory.
+
+
+### Method 3: Manually create the file
+
+If you know what genes and 3' or 5' splice sites you want to plot, you can create your own file following the format above.
 
