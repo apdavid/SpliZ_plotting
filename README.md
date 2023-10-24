@@ -88,3 +88,5 @@ Run the file using `bash run_plot.sbatch` (if you don't have that many genes to 
 ## Output
 
 Output should be created in the `outpath` directory. For each gene and 3' or 5' end, there should be a boxplot, dotplot, and annotation plot. There is also a tsv with the exact coordinates of the annotation plot.
+
+You can see examples of these plots in the `example_output` folder.
