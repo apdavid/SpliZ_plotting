@@ -1,5 +1,7 @@
 output/*.png
 output/*.tsv
+output/*.csv
 *.tsv
 .n*
 *swp
+job_output/*

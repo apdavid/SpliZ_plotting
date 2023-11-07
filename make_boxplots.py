@@ -196,6 +196,7 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
   g = sns.relplot(x="rank_" + let_dict[let], y="ont_num", size="frac_rank",
               sizes=(10, 400), alpha=alpha, palette=palette,hue=grouping_level_2,
               height=max(4,pdf["ontology"].nunique()*0.3), data=pdf)
+  
   for tick_label in g.ax.get_xticklabels():
     try:
       if float(tick_label.get_text()) in ann_dict.keys():
@@ -209,6 +210,8 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
   plt.yticks(range(1,don_df["ontology"].nunique() + 1),onts)
   plt.title("{}\n{} {} {} {}".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
   plt.savefig("{}{}_{}_{}_{}_{}_{}_dot{}_dotplot.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+  pdf[["ont_num","ontology"]].drop_duplicates("ont_num").to_csv("{}{}_{}_{}_{}_{}_{}_dot{}_dotplot.csv".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),index=False)
+
   plt.close()
   return 0
 

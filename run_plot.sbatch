@@ -17,7 +17,7 @@ dataname=PRJNA930874
 suffix=_S_0.01_z_0.0_b_5_SICILIAN
 outdir=/exports/home/jolivieri/data/spliz/${dataname}/ 
 outpath=/exports/home/jolivieri/spliz_boxplots/output/
-plotterFile=plotter.txt
+plotterFile=test_plotter.txt
 gtf_file=/exports/home/jolivieri/data/genomes/TAIR10/TAIR10_GFF3_genes.gtf
 
 
