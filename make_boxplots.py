@@ -145,12 +145,13 @@ def annotation_plot(gtf, domains, gene, end, dataname, suff, rankLabel,outpath):
       plt.xlim([gene_min_all,gene_max_all])
 
     plt.title("{} {} {} don".format(gene,chromosome,end))
-    try:
-      
-      plt.savefig("{}{}_{}_{}_{}_don_ann{}.png".format(outpath,rankLabel,dataname,gene,end,suff),bbox_inches = "tight")
-      plt.close()
-    except Exception as e:
-      print(e)
+#    try:
+    print("SAVED ANNOTATION", "{}{}_{}_{}_{}_don_ann{}.png".format(outpath,rankLabel,dataname,gene,end,suff))
+    plt.savefig("{}{}_{}_{}_{}_don_ann{}.png".format(outpath,rankLabel,dataname,gene,end,suff),bbox_inches = "tight")
+    
+    plt.close()
+#    except Exception as e:
+#      print(e)
 
 # create a color dictionary for donors (our colors)
 def compartment_colors(compartments):
@@ -171,12 +172,29 @@ def get_args():
   args = parser.parse_args()
   return args
 
-def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, rev_dict, domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath):
+def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, rev_dict, domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath, grouping_level_1):
   don_df["ontology_rank"] = don_df["ontology"] + don_df["rank_" + let_dict[let]].astype(str)
   don_df["rank_count"] = don_df["ontology_rank"].map(don_df.groupby("ontology_rank")["numReads"].sum())
   ont_dict = {o : i for o, i in zip(onts,range(1,don_df["ontology"].nunique() + 1))}
+ # onts_sorted = sorted(onts, key=lambda o: (don_df[don_df["ontology"] == o][grouping_level_2].iloc[0], o))
+ # ont_dict = {o : i+1 for i, o in enumerate(onts_sorted)}
   don_df["ont_num"] = don_df["ontology"].map(ont_dict)
   pdf = don_df.drop_duplicates("ontology_rank")
+  ######
+  # Sort ontology labels by grouping_level_2, then alphabetically within each group
+  onts_sorted = (
+    pdf[["ontology", grouping_level_2]]
+    .drop_duplicates()
+    .sort_values([grouping_level_2, "ontology"])
+    ["ontology"]
+    .tolist()
+  )
+
+  # Re-map ont_num based on sorted order
+  ont_dict = {o: i+1 for i, o in enumerate(onts_sorted)}
+#  don_df["ont_num"] = don_df["ontology"].map(ont_dict)
+  pdf["ont_num"] = pdf["ontology"].map(ont_dict)
+  ######
   pdf["rank_sum"] = pdf["ontology"].map(pdf.groupby("ontology")["rank_count"].sum())
   pdf["frac_rank"] = pdf["rank_count"] / pdf["rank_sum"]
   print("ranks",pdf["rank_" + let_dict[let]].value_counts())
@@ -190,12 +208,28 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
   print("save to","{}{}_{}_{}_{}_coords.tsv".format(outpath,rankLabel,dataname,gene,end))
   coords.to_csv("{}{}_{}_{}_{}_coords.tsv".format(outpath,rankLabel,dataname,gene,end),sep="\t",index=False)
   annotation_plot(gtf, domains, gene, end, dataname,suff, rankLabel,outpath)
-
+  print("MADE ANNOTATION PLOT")
   print("ann_dict",ann_dict)
+
+#  print("save to","{}{}_{}_{}_{}_counts.tsv".format(outpath,rankLabel,dataname,gene,end))
+#  pdf[["ontology","refName_newR1", "juncStart", "juncEnd", "ontology_rank","rank_sum"]].to_csv("{}{}_{}_{}_{}_counts.tsv".format(outpath,rankLabel,dataname,gene,end),sep="\t",index=False)
+#  pdf.to_csv("{}{}_{}_{}_{}_counts2.tsv".format(outpath,rankLabel,dataname,gene,end),sep="\t",index=False)
 
   g = sns.relplot(x="rank_" + let_dict[let], y="ont_num", size="frac_rank",
               sizes=(10, 400), alpha=alpha, palette=palette,hue=grouping_level_2,
               height=max(4,pdf["ontology"].nunique()*0.3), data=pdf)
+
+  ax = g.ax  # get the single Axes (works if you don’t facet)
+  pdf["rank_count"] = pdf["rank_count"].astype(int)
+  
+  for i, row in pdf.iterrows():
+      ax.text(
+          row["rank_" + let_dict[let]],
+          row["ont_num"],
+          str(row["rank_count"]),
+          ha="center", va="center",
+          fontsize=8, color="black"
+      )
   
   for tick_label in g.ax.get_xticklabels():
     try:
@@ -207,9 +241,53 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
     except Exception as e:
       print(Exception)
 
-  plt.yticks(range(1,don_df["ontology"].nunique() + 1),onts)
-  plt.title("{}\n{} {} {} {}".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
-  plt.savefig("{}{}_{}_{}_{}_{}_{}_dot{}_dotplot.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+#  plt.yticks(range(1,don_df["ontology"].nunique() + 1),onts)
+  ######
+  plt.yticks(range(1, len(onts_sorted) + 1), onts_sorted)
+  ######
+  plt.title("{}\n{} {} {} {} (count)".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
+  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_count.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+
+  g = sns.relplot(x="rank_" + let_dict[let], y="ont_num", size="frac_rank",
+              sizes=(10, 400), alpha=alpha, palette=palette,hue=grouping_level_2,
+              height=max(4,pdf["ontology"].nunique()*0.3), data=pdf)
+
+  ax = g.ax  # get the single Axes (works if you don’t facet)
+  pdf["rank_count"] = pdf["rank_count"].astype(int)
+  
+  for i, row in pdf.iterrows():
+      ax.text(
+          row["rank_" + let_dict[let]],
+          row["ont_num"],
+          str(round(row["frac_rank"]*100)),
+          ha="center", va="center",
+          fontsize=8, color="black"
+      )
+  
+  for tick_label in g.ax.get_xticklabels():
+    try:
+      if float(tick_label.get_text()) in ann_dict.keys():
+        if ann_dict[int(float(tick_label.get_text()))]:
+          tick_label.set_color("blue")
+        else:
+          tick_label.set_color("red")
+    except Exception as e:
+      print(Exception)
+
+#  plt.yticks(range(1,don_df["ontology"].nunique() + 1),onts)
+  ######
+  plt.yticks(range(1, len(onts_sorted) + 1), onts_sorted)
+  ######
+  plt.title("{}\n{} {} {} {} (percent)".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
+  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_percent.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+
+#  pdf[["ontology","refName_newR1", "juncStart", "juncEnd", "ontology_rank","rank_sum"]].to_csv("{}{}_{}_{}_{}_counts.tsv".format(outpath,rankLabel,dataname,gene,end),sep="\t",index=False)
+  if grouping_level_1 == "dummy":
+      pdf[["refName_newR1", "juncStart", "juncEnd", grouping_level_1, grouping_level_2, "exon_annR1A", "exon_annR1B", "ontology", "rank_count", "ont_num", "rank_sum", "frac_rank"]].sort_values([grouping_level_2],ascending=False).to_csv("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_counts.tsv".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),sep="\t",index=False)
+  else:
+      print("HERE")
+      pdf[["refName_newR1", "juncStart", "juncEnd", grouping_level_1, grouping_level_2, "exon_annR1A", "exon_annR1B", "ontology", "rank_count", "ont_num", "rank_sum", "frac_rank"]].sort_values([grouping_level_2, grouping_level_1],ascending=False).to_csv("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_counts.tsv".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),sep="\t",index=False)
+
   pdf[["ont_num","ontology"]].drop_duplicates("ont_num").to_csv("{}{}_{}_{}_{}_{}_{}_dot{}_dotplot.csv".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),index=False)
 
   plt.close()
@@ -320,7 +398,7 @@ def box(
       if temp["ontology"].nunique() > 0:
         onts = list(temp.sort_values(["ont_rank","ont_75","ont_25","ont_max","ont_min"]).drop_duplicates("ontology")["ontology"].unique())
         onts.reverse()
-        response = dot_plot(don_df, let, let_dict, palette,onts, gene, don, "all", dataname, rev_dict,domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath)
+        response = dot_plot(don_df, let, let_dict, palette,onts, gene, don, "all", dataname, rev_dict,domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath, grouping_level_1)
     for tiss, tiss_df in don_df.groupby(grouping_level_1):
       temp = plot_df(
         tiss_df.drop_duplicates("pos{}_cell".format(let)), 
@@ -343,7 +421,7 @@ def box(
         if temp["ontology"].nunique() > 1:
           onts = list(temp.sort_values(["ont_rank","ont_75","ont_25","ont_max","ont_min"]).drop_duplicates("ontology")["ontology"].unique())
           onts.reverse()
-          response = dot_plot(tiss_df, let, let_dict, palette,onts, gene, don, tiss, dataname, rev_dict, domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath)
+          response = dot_plot(tiss_df, let, let_dict, palette,onts, gene, don, tiss, dataname, rev_dict, domains,gtf, alpha, suff, grouping_level_2, rankLabel,outpath, grouping_level_1)
           if type(response) != int:
             print("ERROR")
             return response
