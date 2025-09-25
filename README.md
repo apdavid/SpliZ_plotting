@@ -1,6 +1,13 @@
-# SpliZ Plotting
+#SpliZ Plotting
 
 Contains code to plot significant genes from SpliZ output (https://github.com/salzman-lab/SpliZ)
+
+
+## 9/25/25 update
+
+First: run `run_prioritize.sh` (need to point to your SpliZ sites file)
+
+Then, run `run_plot.sbatch` (point to file created by previous step; make sure folders exist)
 
 ## Create conda environment
 
