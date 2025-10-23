@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+
 #SBATCH --job-name=boxplot
 #SBATCH --output=job_output/boxplot.%j.out
 #SBATCH --error=job_output/boxplot.%j.err
@@ -10,28 +10,17 @@
 script_plot=make_boxplots.py
 
 # REPLACE THESE VALUES WITH YOUR OWN
-#grouping_level_1=timepoint
-#grouping_level_2=sctype_annotation
-#dataname=GSE251854_e14_e16_full
 
-#grouping_level_1=dummy
-#grouping_level_2=sctype_annotation
-#dataname=GSE137299_p7_full
-
-grouping_level_1=dummy
-grouping_level_2=timepoint
-dataname=GSE137299_HC_low_res
-
-#grouping_level_1=experiment
-#grouping_level_2=partition_cell_type_new
-#dataname=GSE168901_P7
+grouping_level_1=cell_type
+grouping_level_2=developmental_age
+dataname=petipre_sgn_2022
 
 suffix=_S_0.1_z_0.0_b_5_r_0.01
 outdir=/data/l2_jan_lab/projects/ear_spliz/results/${dataname}/ 
 outpath=/data/l2_jan_lab/projects/ear_spliz/results/plots/${dataname}/
 #plotterFile=/data/l2_jan_lab/projects/ear_spliz/results/DIV3_rep2/SpliZ_sites/first_evec_DIV3_rep2_pvals_cell_type-dummy_100_S_0.1_z_0.0_b_5_r_0.01.tsv
 plotterFile=/data/l2_jan_lab/projects/ear_spliz/src/${dataname}_0.25.tsv
-gtf_file=/data/l2_jan_lab/projects/ear_spliz/raw_data/gencode.vM31.primary_assembly.annotation.gtf
+gtf_file=/data/l2_jan_lab/abel/alt_splicing_sgn/SICILIAN_references/SICILIAN_mouse_mm10_Refs/gtf_file/GCF_000001635.26_GRCm38.p6_genomic.gtf
 
 
 # THESE VALUES SHOULD STAY THE SAME
@@ -48,8 +37,6 @@ mkdir -p ${outpath}dotplots/
 echo $grouping_level_1
 echo $grouping_level_2
 echo $dataname
-
-
 
 python ${script_plot} \
     --plotterFile ${plotterFile} \

@@ -146,8 +146,8 @@ def annotation_plot(gtf, domains, gene, end, dataname, suff, rankLabel,outpath):
 
     plt.title("{} {} {} don".format(gene,chromosome,end))
 #    try:
-    print("SAVED ANNOTATION", "{}{}_{}_{}_{}_don_ann{}.png".format(outpath,rankLabel,dataname,gene,end,suff))
-    plt.savefig("{}{}_{}_{}_{}_don_ann{}.png".format(outpath,rankLabel,dataname,gene,end,suff),bbox_inches = "tight")
+    print("SAVED ANNOTATION", "{}{}_{}_{}_{}_ann{}.pdf".format(outpath,rankLabel,dataname,gene,end,suff))
+    plt.savefig("{}{}_{}_{}_{}_ann{}.pdf".format(outpath,rankLabel,dataname,gene,end,suff),bbox_inches = "tight")
     
     plt.close()
 #    except Exception as e:
@@ -246,7 +246,7 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
   plt.yticks(range(1, len(onts_sorted) + 1), onts_sorted)
   ######
   plt.title("{}\n{} {} {} {} (count)".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
-  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_count.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_count.pdf".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
 
   g = sns.relplot(x="rank_" + let_dict[let], y="ont_num", size="frac_rank",
               sizes=(10, 400), alpha=alpha, palette=palette,hue=grouping_level_2,
@@ -279,7 +279,7 @@ def dot_plot(don_df, let, let_dict, palette, onts, gene, don, tiss, dataname, re
   plt.yticks(range(1, len(onts_sorted) + 1), onts_sorted)
   ######
   plt.title("{}\n{} {} {} {} (percent)".format(dataname,gene,tiss, don, let_dict[rev_dict[let]]))
-  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_percent.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+  plt.savefig("{}dotplots/{}_{}_{}_{}_{}_{}_dot{}_dotplot_percent.pdf".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
 
 #  pdf[["ontology","refName_newR1", "juncStart", "juncEnd", "ontology_rank","rank_sum"]].to_csv("{}{}_{}_{}_{}_counts.tsv".format(outpath,rankLabel,dataname,gene,end),sep="\t",index=False)
   if grouping_level_1 == "dummy":
@@ -369,7 +369,7 @@ def plot_df(df, let, cell_lim, gene, dataname, let_dict, palette, rev_dict, don,
         plt.scatter([medians[i]],[i],color = "k",s=20,zorder=100)
       plt.title("{}\n{} {} {} {}\nmean: {:0.2f} median: {:0.2f}".format(dataname,gene,tiss, don, let_dict[rev_dict[let]], don_df["avg_rank"].mean(), don_df["avg_rank"].median()))
       plt.legend(bbox_to_anchor=(1.5, 1.05))
-      plt.savefig("{}{}_{}_{}_{}_{}_{}{}_boxplot.png".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
+      plt.savefig("{}{}_{}_{}_{}_{}_{}{}_boxplot.pdf".format(outpath,rankLabel, gene, don, tiss, dataname, let_dict[rev_dict[let]],suff),bbox_inches="tight")
       plt.close()
       return df
 
