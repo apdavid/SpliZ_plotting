@@ -1,7 +1,10 @@
-#SpliZ Plotting
+# SpliZ Plotting
 
 Contains code to plot significant genes from SpliZ output (https://github.com/salzman-lab/SpliZ)
 
+## 10/23/25 update
+
+Added mm10 GTF file and changed the figure output to PDF
 
 ## 9/25/25 update
 
