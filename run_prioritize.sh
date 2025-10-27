@@ -7,17 +7,15 @@
 #SBATCH --cpus-per-task=2
 
 # Define arguments
-#NAME="GSE168901_E16"
-#GROUP1=experiment
-#GROUP2=partition_cell_type_new
-
-NAME="GSE137299_HC_low_res"
+NAME="petipre_sgn_2022"
 OUTPATH=${NAME}
-GROUP1=dummy
-GROUP2=timepoint
+GROUP1=sgn_type
+GROUP2=developmental_time
 CUTOFF=0.25
-PLOTTERFILE=/data/l2_jan_lab/projects/ear_spliz/results/${NAME}/SpliZ_sites/first_evec_${NAME}_pvals_${GROUP2}-${GROUP1}_100_S_0.1_z_0.0_b_5_r_0.01.tsv
-SVD=/data/l2_jan_lab/projects/ear_spliz/results/${NAME}/SpliZ_values/${NAME}_sym_SVD_normdonor_S_0.1_z_0.0_b_5_r_0.01.pq
+
+# Define file paths: first eigenvector and SVD file
+PLOTTERFILE=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_sites/first_evec_${NAME}_pvals_${GROUP2}-${GROUP1}_100_S_0.1_z_0.0_b_5_r_0.01.tsv
+SVD=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_values/${NAME}_sym_SVD_normdonor_S_0.1_z_0.0_b_5_r_0.01.pq
 
 # Run the script
 python prioritize_plotting.py \
