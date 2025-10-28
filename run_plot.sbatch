@@ -15,7 +15,7 @@ grouping_level_1=sgn_type
 grouping_level_2=developmental_time
 dataname=petipre_sgn_2022
 
-suffix=_S_0.1_z_0.0_b_5_r_0.01
+suffix=_S_0.1_z_0.0_b_5
 outdir=/data/l2_jan_lab/abel/SpliZ/results/${dataname}/ 
 outpath=/data/l2_jan_lab/abel/SpliZ/results/plots/${dataname}/
 #plotterFile=/data/l2_jan_lab/projects/ear_spliz/results/DIV3_rep2/SpliZ_sites/first_evec_DIV3_rep2_pvals_cell_type-dummy_100_S_0.1_z_0.0_b_5_r_0.01.tsv

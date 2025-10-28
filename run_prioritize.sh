@@ -9,13 +9,13 @@
 # Define arguments
 NAME="petipre_sgn_2022"
 OUTPATH=${NAME}
-GROUP1=sgn_type
-GROUP2=developmental_time
+GROUP1=cell_type
+GROUP2=developmental_age
 CUTOFF=0.25
 
 # Define file paths: first eigenvector and SVD file
-PLOTTERFILE=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_sites/first_evec_${NAME}_pvals_${GROUP2}-${GROUP1}_100_S_0.1_z_0.0_b_5_r_0.01.tsv
-SVD=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_values/${NAME}_sym_SVD_normdonor_S_0.1_z_0.0_b_5_r_0.01.pq
+PLOTTERFILE=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_sites/first_evec_${NAME}_pvals_${GROUP2}-${GROUP1}_100_S_0.1_z_0.0_b_5.tsv
+SVD=/data/l2_jan_lab/abel/SpliZ/results/${NAME}/SpliZ_values/${NAME}_sym_SVD_normdonor_S_0.1_z_0.0_b_5.pq
 
 # Run the script
 python prioritize_plotting.py \
