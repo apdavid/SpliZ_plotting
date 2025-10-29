@@ -2,6 +2,34 @@
 
 Contains code to plot significant genes from SpliZ output (https://github.com/salzman-lab/SpliZ)
 
+## Sorting by Grouping Level 1
+
+Change the following code in `dot_plot()`
+
+Sort by Grouping Level 2 (Old):
+
+```
+onts_sorted = (
+pdf[["ontology", grouping_level_2]]
+.drop_duplicates()
+.sort_values([grouping_level_2, "ontology"])
+["ontology"]
+.tolist()
+)
+```
+
+Sort by Grouping Level 1 (New):
+
+```
+onts_sorted = (
+pdf[["ontology", grouping_level_1]]
+.drop_duplicates()
+.sort_values([grouping_level_1, "ontology"])
+["ontology"]
+.tolist()
+)
+```
+
 ## 10/23/25 update
 
 Added mm10 GTF file and changed the figure output to PDF
