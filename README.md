@@ -119,6 +119,8 @@ Edit the following lines in `run_plot.sbatch`:
 * `plotterFile`: The path to the plotter file you want to use
 * `gtf_file`: Path to the gtf file used for SpliZ
 
+> It is important to match the gtf file that was used (i.e. mm39 versus mm10 annotation genome)
+
 The remaining paths should be correctly defined with these inputs.
 
 Run the file using `bash run_plot.sbatch` (if you don't have that many genes to plot), or `sbatch run_plot.sbatch` (if you have many genes to plot).
